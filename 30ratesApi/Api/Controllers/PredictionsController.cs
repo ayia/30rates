@@ -20,11 +20,11 @@ namespace Api.Controllers
 
         // GET: api/<PredictionsController>
         [HttpGet]
-        public Prediction Get()
+        public async Task<Prediction>  Get()
         {
             string urlData = _configuration["urldata"];
-            
-            return DTO.DTO.GetData(urlData);
+            Prediction po = await new DTO.DTO().GetDataAsync(urlData);
+            return po;
         }
 
         

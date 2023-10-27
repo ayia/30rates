@@ -1,26 +1,77 @@
 ﻿
 using Api.Models;
 using HtmlAgilityPack;
+using OpenQA.Selenium;
+
 using System.Globalization;
+
+using System.Net.Http.Headers;
+
 using System.Text.RegularExpressions;
+using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Support.UI;
+using System.Web;
 
 namespace Api.DTO
 {
     public class DTO
     {
-
-        private static string GetHtml(string url)
+        private string GetHtmlContent(string url)
         {
-            HttpClient client = new HttpClient();
-            string v =  client.GetStringAsync(url).Result;
-            return v;
+            IWebDriver driver = null;
+            try
+            {
+                // Set the Firefox driver path
+                string firefoxDriverPath = @"C:\\Notification\\geckodriver";
+
+                // Create FirefoxOptions instance to configure the Firefox browser
+                var options = new FirefoxOptions();
+
+                // Set the options for running the browser in headless mode
+                options.AddArgument("--headless");  // Run the browser in headless mode (no visible UI)
+
+                // Create the FirefoxDriver instance
+                driver = new FirefoxDriver(firefoxDriverPath, options);
+
+                // Navigate to the URL
+                driver.Navigate().GoToUrl(url);
+
+                // Wait for the page to load completely (adjust the timeout as needed)
+                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                wait.Until(d => ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").Equals("complete"));
+
+                // Get the HTML content
+                string htmlContent = driver.PageSource;
+
+                return htmlContent;
+            }
+            finally
+            {
+                // Quit the driver and close the browser
+                driver?.Quit();
+            }
+        }
+
+        private async Task<string> GetHtmlAsync(string url)
+        {
+
+
+            var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, "https://app.scrapingbee.com/api/v1/?api_key=X7TFNDUFVT6ZIGRY5SKPB4PE7EPUK6AT0BWEN6DVFH64K1ED4RARTMAAD1DVUJX323492A7JWU029D1G&url="+ HttpUtility.UrlEncode(url));
+             var content = new StringContent(string.Empty);
+            content.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
+            request.Content = content;
+            var response =  client.Send(request);
+            response.EnsureSuccessStatusCode();
+            return (await response.Content.ReadAsStringAsync());
 
         }
 
-        public static Prediction GetData(string url) {
+        public async Task<Prediction> GetDataAsync(string url) {
 
             Prediction a= new Prediction();
-            string html = GetHtml(url);
+
+            string html = await GetHtmlAsync(url);
             HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(html);
             HtmlNode h2Node = htmlDoc.DocumentNode.SelectSingleNode("//div[@itemprop='articleBody']/h2");
