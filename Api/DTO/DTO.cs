@@ -1,6 +1,6 @@
 ﻿using Api.Models;
 using HtmlAgilityPack;
-using PuppeteerSharp;
+using RestSharp;
 using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -14,20 +14,14 @@ namespace Api.DTO
 
         private static async Task<string> GetHtmlAsync(string url)
         {
-            WebRequest request = WebRequest.Create(url);
-            request.Method = "GET";
-
-            using (WebResponse response = await request.GetResponseAsync())
+            var options = new RestClientOptions()
             {
-                using (Stream stream = response.GetResponseStream())
-                {
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        return await reader.ReadToEndAsync();
-                    }
-                }
-            }
-            request.Abort();
+                Timeout = -1,
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest(url, Method.Get);
+            RestResponse response = await client.ExecuteAsync(request);
+            return (response.Content);
         }
 
         public async Task<Prediction> GetDataAsync(string url)
