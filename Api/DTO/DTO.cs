@@ -1,8 +1,8 @@
 ﻿using Api.Models;
 using HtmlAgilityPack;
+using PuppeteerSharp;
 using System.Globalization;
-using System.Net.Http;
-using System.Net.Http.Headers;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Web;
 
@@ -12,11 +12,22 @@ namespace Api.DTO
     {
         private static HttpClient client = new HttpClient();
 
-        private async Task<string> GetHtmlAsync(string url)
+        private static async Task<string> GetHtmlAsync(string url)
         {
-            var response = await client.GetAsync(url);
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsStringAsync();
+            WebRequest request = WebRequest.Create(url);
+            request.Method = "GET";
+
+            using (WebResponse response = await request.GetResponseAsync())
+            {
+                using (Stream stream = response.GetResponseStream())
+                {
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        return await reader.ReadToEndAsync();
+                    }
+                }
+            }
+            request.Abort();
         }
 
         public async Task<Prediction> GetDataAsync(string url)
