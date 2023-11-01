@@ -2,26 +2,20 @@
 using HtmlAgilityPack;
 using RestSharp;
 using System.Globalization;
-using System.Net;
 using System.Text.RegularExpressions;
-using System.Web;
+using System.Threading.Tasks;
 
 namespace Api.DTO
 {
     public class DTO
     {
-        private static HttpClient client = new HttpClient();
+        private static readonly RestClient client = new RestClient();
 
         private static async Task<string> GetHtmlAsync(string url)
         {
-            var options = new RestClientOptions()
-            {
-                Timeout = -1,
-            };
-            var client = new RestClient(options);
             var request = new RestRequest(url, Method.Get);
             RestResponse response = await client.ExecuteAsync(request);
-            return (response.Content);
+            return response.Content;
         }
 
         public async Task<Prediction> GetDataAsync(string url)
