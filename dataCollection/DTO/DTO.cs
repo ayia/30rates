@@ -1,0 +1,41 @@
+﻿using dataCollection.Models;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace dataCollection.DTO
+{
+    public class DTO
+    {
+
+        public async Task<PredictionResult> getPredictionResultAsync()
+        {
+            // Make the HTTP request to get the JSON response
+            string url = "http://localhost:5000/api/Predictions";
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync(url);
+            string jsonResponse = await response.Content.ReadAsStringAsync();
+
+            // Deserialize the JSON into a Rates30 object
+            return JsonConvert.DeserializeObject<PredictionResult>(jsonResponse);
+         
+        }
+        public void Save(PredictionResult pr, TreadContext treadContext)
+        {
+            Rates30 hj=new Rates30()
+            {
+                Date = DateTime.Now,
+                HighPrice = pr.HighPrice,
+                LowPrice = pr.LowPrice,
+                ClosingPrice = pr.ClosingPrice,
+
+            };
+            treadContext.Rates30s.Add(hj);
+            treadContext.SaveChanges();
+
+        }
+    }
+}
