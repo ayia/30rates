@@ -15,7 +15,7 @@ Timer timer = new Timer(async (state) =>
     // Check if the result is different from PredictionResult default0
     PredictionResult newResult = await dTO.getPredictionResultAsync();
 
-    if (! newResult.Equals(default0))
+    if (! newResult.Equals(default0) && newResult !=null)
     {
         // Modify the old value with the new value
         default0 = newResult;

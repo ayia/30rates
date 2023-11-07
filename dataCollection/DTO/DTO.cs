@@ -13,16 +13,20 @@ namespace dataCollection.DTO
 
         public async Task<PredictionResult> getPredictionResultAsync()
         {
+            try { 
             // Make the HTTP request to get the JSON response
             string url = "http://localhost:5000/api/Predictions";
             HttpClient client = new HttpClient();
             HttpResponseMessage response = await client.GetAsync(url);
             string jsonResponse = await response.Content.ReadAsStringAsync();
-
+            PredictionResult res= JsonConvert.DeserializeObject<PredictionResult>(jsonResponse);
             // Deserialize the JSON into a Rates30 object
-            return JsonConvert.DeserializeObject<PredictionResult>(jsonResponse);
-         
-        }
+            return res;
+            }catch (Exception ex) {
+                return null;
+            }
+            }
+        
         public void Save(PredictionResult pr, TreadContext treadContext)
         {
             Rates30 hj=new Rates30()
