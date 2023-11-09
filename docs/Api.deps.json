@@ -9,7 +9,7 @@
       "Api/1.0.0": {
         "dependencies": {
           "HtmlAgilityPack": "1.11.54",
-          "RestSharp": "106.13.0",
+          "RestSharp": "107.1.2",
           "Swashbuckle.AspNetCore": "6.5.0"
         },
         "runtime": {
@@ -33,11 +33,11 @@
           }
         }
       },
-      "RestSharp/106.13.0": {
+      "RestSharp/107.1.2": {
         "runtime": {
-          "lib/netstandard2.0/RestSharp.dll": {
-            "assemblyVersion": "106.13.0.0",
-            "fileVersion": "106.13.0.0"
+          "lib/net6.0/RestSharp.dll": {
+            "assemblyVersion": "107.1.2.0",
+            "fileVersion": "107.1.2.0"
           }
         }
       },
@@ -108,12 +108,12 @@
       "path": "microsoft.openapi/1.2.3",
       "hashPath": "microsoft.openapi.1.2.3.nupkg.sha512"
     },
-    "RestSharp/106.13.0": {
+    "RestSharp/107.1.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-vwUdmmtC5vtePeNfBWnFcixBF2KjUeVv3ss4ZFzCIkOf7NB7W/9qX8JNZD9DOrz2yGk4AJW8k9znwgPZhnoiNg==",
-      "path": "restsharp/106.13.0",
-      "hashPath": "restsharp.106.13.0.nupkg.sha512"
+      "sha512": "sha512-CD2JDjyNTTE6Jd0SqJGR/ypE+O0WLguFiyH57xcBPKhvWu4klU+LfQRcHWDwAK3Hd9X2/9c3tWz2OrJZu7WTkA==",
+      "path": "restsharp/107.1.2",
+      "hashPath": "restsharp.107.1.2.nupkg.sha512"
     },
     "Swashbuckle.AspNetCore/6.5.0": {
       "type": "package",
