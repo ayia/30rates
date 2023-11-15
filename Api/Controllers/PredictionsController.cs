@@ -19,11 +19,12 @@ namespace Api.Controllers
 
         // GET: api/<PredictionsController>
         [HttpGet]
-        public async Task<Prediction>  Get()
+        public async Task<string>  Get()
         {
             string urlData = _configuration["urldata"];
             Prediction po = await new DTO.DTO().GetDataAsync(urlData);
-            return po;
+            return po.Date+"|"+po.Direction + "|" +po.LowPrice + "|" +po.ClosingPrice
+                + "|" +po.HighPrice;
         }
 
         
