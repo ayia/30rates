@@ -26,7 +26,16 @@ namespace Api.Controllers
             return po.Date+"|"+po.Direction + "|" +po.LowPrice + "|" +po.ClosingPrice
                 + "|" +po.HighPrice;
         }
+        [HttpGet]
+        [Route("PredictionTWo")]
+        public async Task<string> PredictionTWo()
+        {
+            string urlData = _configuration["urldata"];
+            Prediction po = await new DTO.DTO().GetDataAsync(urlData);
+            return po.Date + "|" + po.Direction + "|" + ((po.LowPrice+ po.ClosingPrice)/2).ToString("F4") + "|" + po.ClosingPrice
+                + "|" + ((po.HighPrice + po.ClosingPrice) / 2).ToString("F4");
+        }
 
-        
+
     }
 }
